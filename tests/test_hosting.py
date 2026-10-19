@@ -154,6 +154,8 @@ def test_container_serves_http_and_restarts_with_persistent_data(tmp_path):
         assert requests.get(url + "/api/admin/licenses", timeout=3).status_code == 401
         signing_key = (data / "secrets.json").read_bytes()
         docker("restart", container)
+        # Docker may assign a different ephemeral host port after a restart.
+        url = "http://" + docker("port", container, "3000/tcp").splitlines()[0]
         assert health()["status"] == "ok"
         assert (data / "secrets.json").read_bytes() == signing_key
     finally:
