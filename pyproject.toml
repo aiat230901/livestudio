@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tiktok-live-recorder"
+version = "7.7.1"
+description = "A tool for recording TikTok live streams"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+dependencies = [
+    "ffmpeg-python>=0.2.0",
+    "telethon>=1.42.0",
+    "distro>=1.9.0",
+    "curl_cffi>=0.12.0",
+    "requests>=2.32.0",
+]
+
+[project.optional-dependencies]
+admin = ["Flask>=3.1,<4", "cryptography>=46,<49", "waitress>=3,<4"]
+desktop = ["PySide6>=6.8,<7", "cryptography>=46,<49"]
+dev = [
+    "ruff>=0.12.0",
+    "pre-commit>=4.3.0",
+    "bump-my-version>=0.32.0",
+    "pytest",
+]
+
+[project.urls]
+Homepage = "https://github.com/Michele0303/tiktok-live-recorder"
+Repository = "https://github.com/Michele0303/tiktok-live-recorder"
+Issues = "https://github.com/Michele0303/tiktok-live-recorder/issues"
+
+[project.scripts]
+tiktok-live-recorder = "main:main"
+tiktok-live-recorder-gui = "desktop.app:main"
+
+[tool.setuptools]
+py-modules = ["main", "check_updates"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+desktop = ["assets/*.svg"]
+license_server = ["templates/*.html", "static/*.css", "static/*.js"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+testpaths = [
+    "tests",
+]
+
+[tool.bumpversion]
+current_version = "7.7.1"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+message = "chore: bump version {current_version} → {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "src/utils/enums.py"
+search = 'VERSION = "{current_version}"'
+replace = 'VERSION = "{new_version}"'

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Tạo tài khoản quản trị' if setup else 'Đăng nhập' }} · Live Studio{% endblock %}
+{% block body %}
+<main class="auth-shell">
+  <section class="auth-intro">
+    <div class="brand"><span class="brand-mark">{{ icon('video') }}</span> LIVE STUDIO</div>
+    <span class="eyebrow">KHÔNG GIAN QUẢN TRỊ</span>
+    <h1>Quản lý quyền sử dụng.<br>Chủ động trong một nơi.</h1>
+    <p>Tạo key, theo dõi kích hoạt và quản lý thời hạn sử dụng cho khách hàng của bạn.</p>
+    <div class="auth-points"><div>{{ icon('key') }} Tạo key theo gói ngày sử dụng</div><div>{{ icon('shield') }} Một key, một thiết bị được liên kết</div><div>{{ icon('clock') }} Gia hạn và theo dõi lịch sử rõ ràng</div></div>
+    <small>Bản thử cục bộ · Dữ liệu quản trị lưu riêng trên máy</small>
+  </section>
+  <section class="auth-card card">
+    <div class="tile">{{ icon('shield') }}</div>
+    <h2>{{ 'Tạo tài khoản admin' if setup else 'Chào mừng trở lại' }}</h2>
+    <p class="muted">{{ 'Thiết lập một lần để bắt đầu quản lý key của bạn.' if setup else 'Đăng nhập để mở bảng quản trị Live Studio.' }}</p>
+    {% if error %}<div class="notice error" role="alert">{{ error }}</div>{% endif %}
+    {% if request.args.get('ready') %}<div class="notice success">Tài khoản đã được tạo. Bạn có thể đăng nhập ngay.</div>{% endif %}
+    <form method="post" action="{{ url_for('setup' if setup else 'login') }}" class="form-stack">
+      <input type="hidden" name="csrf" value="{{ session.get('csrf', '') }}">
+      <label>Tên đăng nhập<input name="username" autocomplete="username" minlength="3" maxlength="32" required autofocus placeholder="Tên đăng nhập của bạn"></label>
+      <label>Mật khẩu<input name="password" type="password" autocomplete="{{ 'new-password' if setup else 'current-password' }}" {% if setup %}minlength="12"{% endif %} maxlength="128" required placeholder="{{ 'Tối thiểu 12 ký tự' if setup else 'Nhập mật khẩu' }}"></label>
+      {% if setup %}<label>Nhập lại mật khẩu<input name="confirm" type="password" autocomplete="new-password" minlength="12" maxlength="128" required placeholder="Nhập lại mật khẩu vừa chọn"></label>{% endif %}
+      <button class="primary wide" type="submit">{{ 'Tạo tài khoản' if setup else 'Đăng nhập' }} <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="small muted">{{ 'Bạn tự đặt tài khoản và mật khẩu. Hệ thống không có mật khẩu mặc định.' if setup else 'Đây là trang riêng dành cho chủ tool. Người dùng chỉ nhận key kích hoạt.' }}</p>
+  </section>
+</main>
+{% endblock %}
