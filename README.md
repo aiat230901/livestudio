@@ -26,7 +26,7 @@ Máy chủ local tạo `license-client.json` bên cạnh các launcher.
 - [API giấy phép](docs/API_GIAY_PHEP.md)
 
 ```powershell
-uv run --extra desktop --extra admin --extra dev pytest -q
+uv run --extra desktop --extra admin --extra dev python -m pytest -q
 ```
 
 Database admin, khóa ký riêng, cookie TikTok, cấu hình Telegram, video, log
