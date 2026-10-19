@@ -24,6 +24,10 @@ Máy chủ local tạo `license-client.json` bên cạnh các launcher.
 - [Hướng dẫn kích hoạt](docs/HUONG_DAN_KICH_HOAT.md)
 - [Cách dùng và giới hạn bản thử](docs/HUONG_DAN_BAN_THU.md)
 - [API giấy phép](docs/API_GIAY_PHEP.md)
+- [Triển khai admin và giấy phép lên hosting HTTPS](docs/TRIEN_KHAI_HOSTING.md)
+
+Dockerfile tại gốc repo chạy máy chủ admin/giấy phép trên cổng 3000; hướng dẫn
+Docker CLI trong README dự án gốc bên dưới không áp dụng cho image này.
 
 ```powershell
 uv run --extra desktop --extra admin --extra dev python -m pytest -q

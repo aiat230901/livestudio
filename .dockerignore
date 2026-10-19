@@ -1,0 +1,10 @@
+# Allow only the files required by the hosting image into the build context.
+**
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!src/
+!src/license_server/
+!src/license_server/**
+**/__pycache__/
+**/*.pyc

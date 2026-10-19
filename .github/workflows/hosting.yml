@@ -1,0 +1,21 @@
+name: Hosting container
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen --extra admin --extra dev
+      - run: uv run --no-sync python -m pytest tests/test_hosting.py -q
+        env:
+          LIVE_STUDIO_TEST_DOCKER: '1'
