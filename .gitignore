@@ -165,6 +165,7 @@ secrets.json
 .agents/
 .codex/
 .aws/
+.release-signing/
 
 # Keep diagnostic source scripts, exclude recordings, reports and backup folders
 /diagnostics/*

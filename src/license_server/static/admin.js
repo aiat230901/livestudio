@@ -4,6 +4,7 @@ const csrf = document.querySelector('meta[name="csrf-token"]').content;
 const statusNames = {pending:'Chưa kích hoạt',active:'Đang hoạt động',expired:'Đã hết hạn',blocked:'Đã khóa',archived:'Đã lưu trữ'};
 const actionNames = {admin_setup:'Tạo tài khoản admin',login:'Đăng nhập',password_changed:'Đổi mật khẩu',key_created:'Tạo key',activated:'Kích hoạt thiết bị',renewed:'Gia hạn key',blocked:'Khóa key',unblocked:'Mở khóa key',device_reset:'Reset thiết bị',note_changed:'Cập nhật ghi chú',backup_downloaded:'Tải bản sao lưu'};
 Object.assign(actionNames,{archived:'Lưu trữ key',restored:'Khôi phục key',key_deleted:'Xóa key chưa kích hoạt',audit_cleaned:'Dọn lịch sử cũ'});
+actionNames.release_published='Phát hành bản Windows';
 let page = 1, pages = 1, auditPage = 1, currentKey = null, toastTimer, searchTimer, requestSequence = 0;
 function el(tag, cls, text) { const node = document.createElement(tag); if (cls) node.className = cls; if (text !== undefined) node.textContent = text; return node; }
 function date(value) { return value == null ? 'Chưa kích hoạt' : new Intl.DateTimeFormat('vi-VN', {timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(value*1000)); }

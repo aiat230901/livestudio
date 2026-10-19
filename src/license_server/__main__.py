@@ -74,17 +74,10 @@ def main():
             service._audit(db, "server-owner", "sessions_revoked")
         print("Đã thu hồi các phiên admin cũ.")
         return 0
-    from waitress import create_server
+    from license_server.hosting import http_server
 
     try:
-        server = create_server(
-            app,
-            host="127.0.0.1",
-            port=args.port,
-            threads=4,
-            max_request_body_size=16384,
-            ident="LiveStudioAdmin",
-        )
+        server = http_server(app, "127.0.0.1", args.port)
     except OSError:
         print(f"Cổng {args.port} đang được dùng. Hãy chọn cổng khác bằng --port.")
         return 1

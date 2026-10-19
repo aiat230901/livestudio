@@ -1,0 +1,24 @@
+LIVE STUDIO — WINDOWS 10/11 64-BIT
+
+1. Giải nén toàn bộ ZIP vào thư mục riêng mà bạn có quyền ghi, ví dụ D:\LiveStudio.
+2. Mở LiveStudio.exe. Giữ nguyên các thư mục bin và _internal cạnh EXE.
+3. Nhập key do người quản trị cấp. Lần kích hoạt đầu cần internet; mỗi key dùng một máy.
+4. Thêm username/link kênh TikTok, chọn thư mục lưu và chế độ theo dõi liên tục hoặc đặt lịch.
+5. Chọn Ghi ngay để thử; dừng để hoàn tất MP4. Live kết thúc sớm vẫn lưu phần đã ghi.
+
+Không cần cài Python hoặc FFmpeg. Chất lượng giữ theo nguồn TikTok cung cấp.
+Máy phải bật và tool phải chạy để kiểm tra/ghi; chức năng đặt lịch không đánh thức máy đang tắt.
+
+Bấm X sẽ thu xuống khay hệ thống. Muốn đóng hẳn, chọn Thoát ứng dụng.
+Khi cập nhật, tool yêu cầu bạn đồng ý, tải và xác minh gói rồi hoàn tất video đang ghi.
+Không tắt máy hoặc xóa thư mục trong lúc cập nhật. Bản cũ được giữ trong thư mục .previous cạnh tool.
+
+Danh sách kênh, lịch và giấy phép lưu ở %LOCALAPPDATA%\TikTokLiveStudio.
+Video lưu ở thư mục bạn chọn. Giữ các vị trí này khi đổi thư mục tool.
+Chi tiết lỗi mở ứng dụng được ghi ở application.log trong thư mục dữ liệu trên.
+
+Ứng dụng chưa có chứng thư nhà phát hành Windows; có thể xuất hiện thông báo SmartScreen.
+Chỉ chạy gói lấy từ người quản trị hoặc địa chỉ HTTPS chính thức của bạn.
+
+Phần ghi livestream gốc: Copyright (c) 2023 Michele, MIT; xem LICENSE-MIT.txt.
+Thành phần bên thứ ba và giấy phép: THIRD-PARTY-LICENSES.

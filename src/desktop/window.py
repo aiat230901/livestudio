@@ -76,6 +76,7 @@ class MainWindow(QMainWindow):
         self.store, self.manager = store, manager
         self.licensing = licensing
         self.exiting = False
+        self.pending_update = None
         self._channel_rows = None
         self._history_rows = None
         self._notified = {r["id"] for r in store.list_recordings()}
@@ -317,6 +318,9 @@ class MainWindow(QMainWindow):
         )
         hint.setWordWrap(True)
         layout.addWidget(hint)
+        from desktop.update_dialog import UpdateController
+
+        self.updates = UpdateController(self, layout)
         layout.addStretch()
 
     def navigate(self, index):

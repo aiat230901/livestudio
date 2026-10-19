@@ -4,8 +4,9 @@
 đặt lịch riêng, giới hạn thời lượng, lịch sử video và kích hoạt theo thiết bị.
 Trang admin quản lý key chạy riêng với ứng dụng ghi livestream.
 
-Repo này lưu mã nguồn phát triển. Bản hiện tại chạy thử cục bộ; hosting HTTPS,
-bộ cập nhật riêng và gói EXE/ZIP cho khách chưa hoàn thành.
+Repo này lưu mã nguồn phát triển, máy chủ admin/giấy phép HTTPS và bộ cập nhật
+có chữ ký. Gói EXE/ZIP được build riêng trên Windows, sau đó phát hành qua
+trang admin; không đưa database, khóa ký riêng hoặc ZIP khách hàng vào repo.
 
 ## Chạy bản phát triển trên Windows
 
@@ -25,6 +26,7 @@ Máy chủ local tạo `license-client.json` bên cạnh các launcher.
 - [Cách dùng và giới hạn bản thử](docs/HUONG_DAN_BAN_THU.md)
 - [API giấy phép](docs/API_GIAY_PHEP.md)
 - [Triển khai admin và giấy phép lên hosting HTTPS](docs/TRIEN_KHAI_HOSTING.md)
+- [Đóng gói Windows và phát hành cập nhật](docs/PHAT_HANH_VA_CAP_NHAT.md)
 
 Dockerfile tại gốc repo chạy máy chủ admin/giấy phép trên cổng 3000; hướng dẫn
 Docker CLI trong README dự án gốc bên dưới không áp dụng cho image này.

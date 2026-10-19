@@ -1,3 +1,3 @@
 """Separate local admin and license service; never imported by the recorder."""
 
-API_REVISION = 2
+API_REVISION = 3

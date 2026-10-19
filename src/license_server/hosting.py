@@ -106,6 +106,22 @@ def hosted_app():
     return app
 
 
+def http_server(app, host, port, *, https=False):
+    from waitress import create_server
+    from license_server.releases import CHUNK_SIZE
+
+    return create_server(
+        app,
+        host=host,
+        port=port,
+        threads=4,
+        url_scheme="https" if https else "http",
+        max_request_body_size=CHUNK_SIZE + 1,
+        connection_limit=40,
+        ident="LiveStudioLicense",
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Máy chủ giấy phép Live Studio trên hosting HTTPS"
@@ -122,22 +138,16 @@ def main():
             "Private backup exported. Paste only into the hosting secret LIVE_STUDIO_BOOTSTRAP_BACKUP."
         )
         return
-    from waitress import serve
-
     port = int(os.environ.get("PORT", "3000"))
     if not 1024 <= port <= 65535:
         raise ValueError("PORT phải từ 1024 đến 65535.")
     app = hosted_app()
     print(f"Live Studio license server listening on 0.0.0.0:{port}", flush=True)
-    serve(
-        app,
-        host="0.0.0.0",
-        port=port,
-        threads=4,
-        url_scheme="https",
-        max_request_body_size=16384,
-        ident="LiveStudioLicense",
-    )
+    server = http_server(app, "0.0.0.0", port, https=True)
+    try:
+        server.run()
+    finally:
+        server.close()
 
 
 if __name__ == "__main__":

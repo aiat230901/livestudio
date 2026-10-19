@@ -83,9 +83,16 @@ def create_app(data_dir=None, *, testing=False, clock=None, local=True):
     )
     app.extensions["license_service"] = service
     app.extensions["license_signer"] = signer
+    from license_server.releases import register_releases
+
+    register_releases(app, directory, service)
 
     @app.before_request
     def protect():
+        if request.path == "/api/admin/releases" and request.method == "POST":
+            from license_server.releases import CHUNK_SIZE
+
+            request.max_content_length = CHUNK_SIZE
         if request.routing_exception is not None:
             return None
         path = request.path

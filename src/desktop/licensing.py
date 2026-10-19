@@ -89,7 +89,17 @@ def load_config(path=None):
         / "license-client.json"
     )
     try:
-        config = json.loads(path.read_text(encoding="utf-8"))
+        if getattr(sys, "frozen", False):
+            from desktop.updates import bundled_config
+
+            bundled = bundled_config()
+            config = dict(
+                version=1,
+                server_url=bundled["server_url"],
+                public_key=bundled["license_public_key"],
+            )
+        else:
+            config = json.loads(path.read_text(encoding="utf-8"))
         url = urlsplit(config["server_url"])
         valid_transport = url.scheme == "https" or (
             url.scheme == "http" and url.hostname in ("127.0.0.1", "localhost", "::1")

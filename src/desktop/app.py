@@ -15,8 +15,15 @@ def set_startup(enabled):
         winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run"
     ) as key:
         if enabled:
-            executable = str(Path(sys.executable).with_name("pythonw.exe"))
-            command = subprocess.list2cmdline([executable, "-m", "desktop.app"])
+            command = subprocess.list2cmdline(
+                [sys.executable]
+                if getattr(sys, "frozen", False)
+                else [
+                    str(Path(sys.executable).with_name("pythonw.exe")),
+                    "-m",
+                    "desktop.app",
+                ]
+            )
             winreg.SetValueEx(key, "TikTokLiveStudio", 0, winreg.REG_SZ, command)
         else:
             try:
@@ -27,11 +34,14 @@ def set_startup(enabled):
 
 def main():
     multiprocessing.freeze_support()
-    from PySide6.QtCore import QLockFile
+    if getattr(sys, "frozen", False):
+        binaries = Path(sys.executable).parent / "bin"
+        os.environ["PATH"] = str(binaries) + os.pathsep + os.environ.get("PATH", "")
+    from PySide6.QtCore import QLockFile, QTimer
     from PySide6.QtWidgets import QApplication, QMessageBox
     from desktop.theme import apply_theme
 
-    app = QApplication(sys.argv)
+    app = QApplication.instance() or QApplication(sys.argv)
     app.setApplicationName("Live Studio")
     apply_theme(app)
     data = Path(
@@ -74,21 +84,63 @@ def main():
     licensing = LicenseController(client)
     store = None
     manager = None
+    window = None
+    startup_timer = None
+    activation_ready = False
     try:
-        if not LicenseDialog(licensing).exec():
-            return 0
         store = DesktopStore(data / "state.db")
-        manager = RecordingManager(store, license_guard=licensing.allowed)
+        manager = RecordingManager(
+            store, license_guard=lambda: activation_ready and licensing.allowed()
+        )
         window = MainWindow(store, manager, licensing)
         window.show()
+        if "--update-ack" in sys.argv:
+            import json
+            from desktop.updates import bundled_config
+
+            ack = Path(sys.argv[sys.argv.index("--update-ack") + 1])
+            startup_timer = QTimer(window)
+            startup_timer.setSingleShot(True)
+            startup_timer.timeout.connect(
+                lambda: ack.write_text(
+                    json.dumps(
+                        dict(pid=os.getpid(), version=bundled_config()["version"])
+                    ),
+                    encoding="utf-8",
+                )
+            )
+            startup_timer.start(0)
+        if not LicenseDialog(licensing, window).exec():
+            return 0
+        activation_ready = True
+        if getattr(sys, "frozen", False):
+            QTimer.singleShot(2000, lambda: window.updates.check(True))
         return app.exec()
     finally:
+        if startup_timer:
+            startup_timer.stop()
         if manager:
             manager.shutdown()
         if store:
             store.close()
         licensing.close()
         lock.unlock()
+        if window:
+            window.timer.stop()
+            window.tray.hide()
+            window.updates.close()
+            window.hide()
+            if window.pending_update:
+                from desktop.update_dialog import launch_updater
+
+                try:
+                    launch_updater(window.pending_update)
+                except OSError:
+                    QMessageBox.critical(
+                        None,
+                        "Chưa cập nhật được",
+                        "Không mở được trình cập nhật. Bạn có thể mở lại tool hiện tại và thử lại.",
+                    )
 
 
 if __name__ == "__main__":
